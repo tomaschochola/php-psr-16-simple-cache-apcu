@@ -22,6 +22,6 @@ services:
       - 'global_npm_cache:/home/devcontainer/.npm'
 volumes:
   global_composer_cache:
-    name: 'global_composer_cache'
+    external: true
   global_npm_cache:
-    name: 'global_npm_cache'
+    external: true
