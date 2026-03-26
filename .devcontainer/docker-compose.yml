@@ -4,7 +4,7 @@ networks:
 services:
   devcontainer:
     build:
-      context: './'
+      context: '../'
       dockerfile: './Dockerfile'
       target: 'devcontainer'
     command: 'sleep infinity'
@@ -17,7 +17,7 @@ services:
       - 'devcontainer'
     user: 'devcontainer'
     volumes:
-      - './:/var/www/html'
+      - '../:/var/www/html'
       - 'global_composer_cache:/home/devcontainer/.composer'
       - 'global_npm_cache:/home/devcontainer/.npm'
 volumes:
