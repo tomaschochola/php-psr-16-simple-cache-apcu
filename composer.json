@@ -26,24 +26,24 @@
     "process-timeout": 0,
     "sort-packages": true
   },
-  "description": "tomaschochola/php-psr-16-simple-cache",
+  "description": "tomaschochola/php-psr-16-simple-cache-apcu",
   "funding": [
     {
       "type": "github",
       "url": "https://github.com/sponsors/tomaschochola"
     }
   ],
-  "homepage": "https://github.com/tomaschochola/php-psr-16-simple-cache",
+  "homepage": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu",
   "keywords": [
     "tomaschochola",
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "php-psr-16-simple-cache"
+    "php-psr-16-simple-cache-apcu"
   ],
   "license": "CC-BY-ND-4.0",
   "minimum-stability": "dev",
-  "name": "tomaschochola/php-psr-16-simple-cache",
+  "name": "tomaschochola/php-psr-16-simple-cache-apcu",
   "prefer-stable": true,
   "readme": "./README.md",
   "repositories": [
@@ -56,12 +56,18 @@
       "no-api": true,
       "type": "git",
       "url": "https://github.com/tomaschochola/php-tooling-php-cs-fixer-config.git"
+    },
+    {
+      "no-api": true,
+      "type": "git",
+      "url": "https://github.com/tomaschochola/php-psr-16-simple-cache.git"
     }
   ],
   "require": {
     "ext-apcu": "*",
     "php": "^8.5.0",
-    "psr/simple-cache": "^3.0"
+    "psr/simple-cache": "^3.0",
+    "tomaschochola/php-psr-16-simple-cache": "^1.0@dev"
   },
   "require-dev": {
     "ext-intl": "*",
@@ -74,10 +80,10 @@
     "tomaschochola/php-tooling-phpstan-config": "^1.0@dev"
   },
   "support": {
-    "docs": "https://github.com/tomaschochola/php-psr-16-simple-cache",
+    "docs": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu",
     "email": "tomaschochola@tomaschochola.cz",
-    "issues": "https://github.com/tomaschochola/php-psr-16-simple-cache/issues",
-    "source": "https://github.com/tomaschochola/php-psr-16-simple-cache.git"
+    "issues": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu/issues",
+    "source": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu.git"
   },
   "type": "library"
 }

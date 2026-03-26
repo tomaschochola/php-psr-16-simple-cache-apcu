@@ -3,8 +3,8 @@
 ARG PHP_VERSION=8.5-fpm-trixie
 ARG COMPOSER_VERSION=2
 
-FROM composer:${COMPOSER_VERSION} AS versionedcomposer
-FROM php:${PHP_VERSION} AS versionedphp
+FROM composer:2 AS versionedcomposer
+FROM php:8.5-fpm-trixie AS versionedphp
 
 FROM versionedphp AS base
 WORKDIR /var/www/html
@@ -58,4 +58,4 @@ EOF
 COPY ./ops/php/z.ini /usr/local/etc/php/conf.d/z.ini
 COPY ./ops/php/zz.ini /usr/local/etc/php/conf.d/zz.ini
 COPY ./ops/php/zzz.ini /usr/local/etc/php/conf.d/zzz.ini
-USER devcontainer:devcontainer
+USER devcontainer
