@@ -10,18 +10,9 @@ services:
     command: 'sleep infinity'
     environment:
       APP_ENV: 'local'
-      COMPOSER_CACHE_DIR: '/home/devcontainer/.composer'
       NODE_ENV: 'development'
-      npm_config_cache: '/home/devcontainer/.npm'
     networks:
       - 'devcontainer'
     user: 'devcontainer'
     volumes:
       - '../:/var/www/html'
-      - 'global_composer_cache:/home/devcontainer/.composer'
-      - 'global_npm_cache:/home/devcontainer/.npm'
-volumes:
-  global_composer_cache:
-    external: true
-  global_npm_cache:
-    external: true
