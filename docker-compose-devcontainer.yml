@@ -4,7 +4,7 @@ networks:
 services:
   devcontainer:
     build:
-      context: '../'
+      context: './'
       dockerfile: './Dockerfile'
       target: 'devcontainer'
     command: 'sleep infinity'
@@ -15,4 +15,4 @@ services:
       - 'devcontainer'
     user: 'devcontainer'
     volumes:
-      - '../:/var/www/html'
+      - './:/var/www/html'

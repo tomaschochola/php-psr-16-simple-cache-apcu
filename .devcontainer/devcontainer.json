@@ -17,7 +17,7 @@
       }
     }
   },
-  "dockerComposeFile": ["./docker-compose.yml"],
+  "dockerComposeFile": ["../docker-compose-devcontainer.yml"],
   "init": true,
   "postCreateCommand": "make postcreate",
   "remoteUser": "devcontainer",
