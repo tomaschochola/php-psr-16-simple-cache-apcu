@@ -14,6 +14,7 @@ RUN <<EOF
   set -euo pipefail
   apt-get update -y
   apt-get upgrade -y --no-install-recommends
+  pecl channel-update pecl.php.net
   pecl install apcu
   docker-php-ext-enable apcu
   apt-get autoremove -y
