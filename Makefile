@@ -125,14 +125,6 @@ composer_update: ./composer.json
 .PHONY: postcreate
 postcreate: install
 
-.PHONY: password
-password:
-	@tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 32
-
-.PHONY: secret
-secret:
-	@tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 64
-
 .PHONY: devcontainer
 devcontainer:
 	devcontainer up
