@@ -38,22 +38,22 @@ use function iterator_to_array;
  */
 readonly class ApcuSimpleCache implements CacheInterface
 {
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function clear(): bool
     {
         return apcu_clear_cache();
     }
 
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function delete(string $key): bool
     {
         return apcu_delete($key);
     }
 
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function deleteMultiple(iterable $keys): bool
     {
         $ok = true;
@@ -65,8 +65,8 @@ readonly class ApcuSimpleCache implements CacheInterface
         return $ok;
     }
 
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function get(string $key, mixed $default = null): mixed
     {
         $ok = false;
@@ -79,8 +79,8 @@ readonly class ApcuSimpleCache implements CacheInterface
         return $default;
     }
 
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
         $arr = iterator_to_array($keys);
@@ -106,16 +106,16 @@ readonly class ApcuSimpleCache implements CacheInterface
         }
     }
 
-    #[NoDiscard]
-    #[Override]
+    #[NoDiscard()]
+    #[Override()]
     public function has(string $key): bool
     {
         return apcu_exists($key);
     }
 
-    #[NoDiscard]
-    #[Override]
-    public function set(string $key, mixed $value, DateInterval|int|null $ttl = null): bool
+    #[NoDiscard()]
+    #[Override()]
+    public function set(string $key, mixed $value, DateInterval | int | null $ttl = null): bool
     {
         return apcu_store($key, $value, $ttl instanceof DateInterval ? self::getInterval($ttl) : ($ttl ?? 0));
     }
@@ -123,9 +123,9 @@ readonly class ApcuSimpleCache implements CacheInterface
     /**
      * @param iterable<mixed, mixed> $values
      */
-    #[NoDiscard]
-    #[Override]
-    public function setMultiple(iterable $values, DateInterval|int|null $ttl = null): bool
+    #[NoDiscard()]
+    #[Override()]
+    public function setMultiple(iterable $values, DateInterval | int | null $ttl = null): bool
     {
         $ok = true;
 
@@ -138,7 +138,7 @@ readonly class ApcuSimpleCache implements CacheInterface
         return $ok;
     }
 
-    #[NoDiscard]
+    #[NoDiscard()]
     private static function getInterval(DateInterval $interval): int
     {
         $now = new DateTimeImmutable();
