@@ -1,3 +1,4 @@
+name: 'php-psr-16-simple-cache-apcu-devcontainer'
 networks:
   devcontainer:
     internal: false
