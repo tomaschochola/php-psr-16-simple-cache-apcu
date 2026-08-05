@@ -34,14 +34,6 @@ use function iterator_to_array;
 final class ApcuSimpleCacheTest extends TestCase
 {
     #[Test()]
-    public function rejectsInvalidKeys(): void
-    {
-        $this->expectException(PsrInvalidArgumentException::class);
-
-        (new ApcuSimpleCache())->get('invalid:key');
-    }
-
-    #[Test()]
     public function batchDeletionTreatsMissingKeysAsSuccessfullyDeleted(): void
     {
         $cache = new ApcuSimpleCache();
@@ -82,6 +74,14 @@ final class ApcuSimpleCacheTest extends TestCase
     }
 
     #[Test()]
+    public function rejectsInvalidKeys(): void
+    {
+        $this->expectException(PsrInvalidArgumentException::class);
+
+        self::assertNull((new ApcuSimpleCache())->get('invalid:key'));
+    }
+
+    #[Test()]
     public function storesRetrievesAndDeletesValuesIncludingNull(): void
     {
         $cache = new ApcuSimpleCache();
@@ -106,19 +106,15 @@ final class ApcuSimpleCacheTest extends TestCase
         $negativeInterval->invert = 1;
 
         self::assertTrue($cache->clear());
-
         self::assertTrue($cache->set('zero', 'stored'));
         self::assertTrue($cache->set('zero', 'replacement', 0));
         self::assertFalse($cache->has('zero'));
-
         self::assertTrue($cache->set('negative', 'stored'));
         self::assertTrue($cache->set('negative', 'replacement', -1));
         self::assertFalse($cache->has('negative'));
-
         self::assertTrue($cache->set('interval', 'stored'));
         self::assertTrue($cache->set('interval', 'replacement', $negativeInterval));
         self::assertFalse($cache->has('interval'));
-
         self::assertTrue($cache->set('persistent', 'stored', null));
         self::assertSame('stored', $cache->get('persistent'));
     }

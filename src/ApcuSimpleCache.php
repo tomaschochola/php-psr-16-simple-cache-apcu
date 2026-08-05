@@ -47,7 +47,7 @@ readonly class ApcuSimpleCache implements CacheInterface
     #[Override()]
     public function delete(string $key): bool
     {
-        return $this->deleteKey(CacheKeys::validate($key));
+        return self::deleteKey(CacheKeys::validate($key));
     }
 
     #[NoDiscard()]
@@ -57,7 +57,7 @@ readonly class ApcuSimpleCache implements CacheInterface
         $ok = true;
 
         foreach ($keys as $key) {
-            $ok = $this->deleteKey(CacheKeys::validate($key)) && $ok;
+            $ok = self::deleteKey(CacheKeys::validate($key)) && $ok;
         }
 
         return $ok;
@@ -115,7 +115,7 @@ readonly class ApcuSimpleCache implements CacheInterface
     {
         $seconds = $ttl instanceof DateInterval ? self::getInterval($ttl) : $ttl;
 
-        return $this->storeKey(CacheKeys::validate($key), $value, $seconds);
+        return self::storeKey(CacheKeys::validate($key), $value, $seconds);
     }
 
     /**
@@ -130,7 +130,7 @@ readonly class ApcuSimpleCache implements CacheInterface
 
         foreach ($values as $key => $value) {
             $key = CacheKeys::validate(is_int($key) ? (string) $key : $key);
-            $ok = $this->storeKey($key, $value, $seconds) && $ok;
+            $ok = self::storeKey($key, $value, $seconds) && $ok;
         }
 
         return $ok;
@@ -145,16 +145,16 @@ readonly class ApcuSimpleCache implements CacheInterface
     }
 
     #[NoDiscard()]
-    private function deleteKey(string $key): bool
+    private static function deleteKey(string $key): bool
     {
         return apcu_delete($key) || !apcu_exists($key);
     }
 
     #[NoDiscard()]
-    private function storeKey(string $key, mixed $value, ?int $seconds): bool
+    private static function storeKey(string $key, mixed $value, int | null $seconds): bool
     {
         if ($seconds !== null && $seconds <= 0) {
-            return $this->deleteKey($key);
+            return self::deleteKey($key);
         }
 
         return apcu_store($key, $value, $seconds ?? 0);
