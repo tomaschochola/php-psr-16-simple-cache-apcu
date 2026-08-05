@@ -30,8 +30,6 @@ use function array_key_exists;
 use function assert;
 use function is_array;
 use function is_int;
-use function is_string;
-use function iterator_to_array;
 
 /**
  * @no-named-arguments
@@ -49,7 +47,7 @@ readonly class ApcuSimpleCache implements CacheInterface
     #[Override()]
     public function delete(string $key): bool
     {
-        return apcu_delete($key);
+        return $this->deleteKey(CacheKeys::validate($key));
     }
 
     #[NoDiscard()]
@@ -59,7 +57,7 @@ readonly class ApcuSimpleCache implements CacheInterface
         $ok = true;
 
         foreach ($keys as $key) {
-            $ok = $ok && $this->delete((string) $key);
+            $ok = $this->deleteKey(CacheKeys::validate($key)) && $ok;
         }
 
         return $ok;
@@ -70,7 +68,7 @@ readonly class ApcuSimpleCache implements CacheInterface
     public function get(string $key, mixed $default = null): mixed
     {
         $ok = false;
-        $value = apcu_fetch($key, $ok);
+        $value = apcu_fetch(CacheKeys::validate($key), $ok);
 
         if ($ok) {
             return $value;
@@ -83,24 +81,22 @@ readonly class ApcuSimpleCache implements CacheInterface
     #[Override()]
     public function getMultiple(iterable $keys, mixed $default = null): iterable
     {
-        $arr = iterator_to_array($keys);
-        $ok = false;
-        $values = apcu_fetch($arr, $ok);
+        $validatedKeys = [];
 
-        if ($ok) {
-            assert(is_array($values));
+        foreach ($keys as $key) {
+            $validatedKeys[] = CacheKeys::validate($key);
+        }
 
-            foreach ($arr as $key) {
-                $value = $values[$key] ?? null;
+        $values = apcu_fetch($validatedKeys);
 
-                if ($value !== null || array_key_exists($key, $values)) {
-                    yield $key => $value;
-                } else {
-                    yield $key => $default;
-                }
-            }
-        } else {
-            foreach ($arr as $key) {
+        assert(is_array($values));
+
+        foreach ($validatedKeys as $key) {
+            $value = $values[$key] ?? null;
+
+            if ($value !== null || array_key_exists($key, $values)) {
+                yield $key => $value;
+            } else {
                 yield $key => $default;
             }
         }
@@ -110,14 +106,16 @@ readonly class ApcuSimpleCache implements CacheInterface
     #[Override()]
     public function has(string $key): bool
     {
-        return apcu_exists($key);
+        return apcu_exists(CacheKeys::validate($key));
     }
 
     #[NoDiscard()]
     #[Override()]
     public function set(string $key, mixed $value, DateInterval | int | null $ttl = null): bool
     {
-        return apcu_store($key, $value, $ttl instanceof DateInterval ? self::getInterval($ttl) : ($ttl ?? 0));
+        $seconds = $ttl instanceof DateInterval ? self::getInterval($ttl) : $ttl;
+
+        return $this->storeKey(CacheKeys::validate($key), $value, $seconds);
     }
 
     /**
@@ -128,11 +126,11 @@ readonly class ApcuSimpleCache implements CacheInterface
     public function setMultiple(iterable $values, DateInterval | int | null $ttl = null): bool
     {
         $ok = true;
+        $seconds = $ttl instanceof DateInterval ? self::getInterval($ttl) : $ttl;
 
         foreach ($values as $key => $value) {
-            assert(is_string($key) || is_int($key));
-
-            $ok = $ok && $this->set((string) $key, $value, $ttl);
+            $key = CacheKeys::validate(is_int($key) ? (string) $key : $key);
+            $ok = $this->storeKey($key, $value, $seconds) && $ok;
         }
 
         return $ok;
@@ -144,5 +142,21 @@ readonly class ApcuSimpleCache implements CacheInterface
         $now = new DateTimeImmutable();
 
         return $now->add($interval)->getTimestamp() - $now->getTimestamp();
+    }
+
+    #[NoDiscard()]
+    private function deleteKey(string $key): bool
+    {
+        return apcu_delete($key) || !apcu_exists($key);
+    }
+
+    #[NoDiscard()]
+    private function storeKey(string $key, mixed $value, ?int $seconds): bool
+    {
+        if ($seconds !== null && $seconds <= 0) {
+            return $this->deleteKey($key);
+        }
+
+        return apcu_store($key, $value, $seconds ?? 0);
     }
 }
