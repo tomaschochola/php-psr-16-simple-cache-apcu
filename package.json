@@ -31,7 +31,10 @@
     "TomasChochola",
     "Tomas Chochola",
     "Tomáš Chochola",
-    "php-psr-16-simple-cache-apcu"
+    "apcu",
+    "cache",
+    "psr-16",
+    "simple-cache"
   ],
   "license": "CC-BY-ND-4.0",
   "name": "@tomaschochola/php-psr-16-simple-cache-apcu",
