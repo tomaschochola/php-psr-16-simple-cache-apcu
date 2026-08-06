@@ -81,7 +81,7 @@
     "ext-apcu": "*",
     "php": "^8.5.0",
     "psr/simple-cache": "^3.0",
-    "tomaschochola/php-psr-16-simple-cache": "^2.0@dev"
+    "tomaschochola/php-psr-16-simple-cache": "dev-main"
   },
   "require-dev": {
     "ext-intl": "*",
@@ -90,8 +90,8 @@
     "ext-zip": "*",
     "phpunit/phpunit": "^13.0",
     "roave/security-advisories": "dev-latest",
-    "tomaschochola/tooling-php-cs-fixer": "^2.0@dev",
-    "tomaschochola/tooling-phpstan": "^2.0@dev"
+    "tomaschochola/tooling-php-cs-fixer": "dev-main",
+    "tomaschochola/tooling-phpstan": "dev-main"
   },
   "support": {
     "email": "tomaschochola@tomaschochola.cz",
