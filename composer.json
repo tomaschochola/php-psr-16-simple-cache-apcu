@@ -1,102 +1,102 @@
 {
-  "authors": [
-    {
-      "email": "tomaschochola@tomaschochola.cz",
-      "homepage": "https://github.com/tomaschochola",
-      "name": "Tomáš Chochola",
-      "role": "Author"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "TomasChochola\\Psr\\SimpleCache\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests/"
-    }
-  },
-  "config": {
-    "allow-plugins": false,
-    "platform-check": true,
-    "policy": {
-      "abandoned": {
-        "audit": "fail",
-        "block": true
-      },
-      "advisories": {
-        "audit": "fail",
-        "block": true
-      },
-      "malware": {
-        "audit": "fail",
-        "block": true
-      }
+    "authors": [
+        {
+            "email": "tomaschochola@tomaschochola.cz",
+            "homepage": "https://github.com/tomaschochola",
+            "name": "Tomáš Chochola",
+            "role": "Author"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TomasChochola\\Psr\\SimpleCache\\": "src/"
+        }
     },
-    "sort-packages": true
-  },
-  "description": "APCu-backed PSR-16 cache implementation.",
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/tomaschochola"
-    }
-  ],
-  "homepage": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu",
-  "keywords": [
-    "tomaschochola",
-    "TomasChochola",
-    "Tomas Chochola",
-    "Tomáš Chochola",
-    "apcu",
-    "cache",
-    "psr-16",
-    "simple-cache"
-  ],
-  "license": "CC-BY-ND-4.0",
-  "name": "tomaschochola/php-psr-16-simple-cache-apcu",
-  "prefer-stable": true,
-  "provide": {
-    "psr/simple-cache-implementation": "3.0"
-  },
-  "repositories": [
-    {
-      "no-api": true,
-      "type": "vcs",
-      "url": "https://github.com/tomaschochola/php-psr-16-simple-cache.git"
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
-    {
-      "no-api": true,
-      "type": "vcs",
-      "url": "https://github.com/tomaschochola/tooling-php-cs-fixer.git"
+    "config": {
+        "allow-plugins": false,
+        "platform-check": true,
+        "policy": {
+            "abandoned": {
+                "audit": "fail",
+                "block": true
+            },
+            "advisories": {
+                "audit": "fail",
+                "block": true
+            },
+            "malware": {
+                "audit": "fail",
+                "block": true
+            }
+        },
+        "sort-packages": true
     },
-    {
-      "no-api": true,
-      "type": "vcs",
-      "url": "https://github.com/tomaschochola/tooling-phpstan.git"
-    }
-  ],
-  "require": {
-    "ext-apcu": "*",
-    "php": "^8.5.0",
-    "psr/simple-cache": "^3.0",
-    "tomaschochola/php-psr-16-simple-cache": "dev-main"
-  },
-  "require-dev": {
-    "ext-intl": "*",
-    "ext-pcntl": "*",
-    "ext-xdebug": "*",
-    "ext-zip": "*",
-    "phpunit/phpunit": "^13.0",
-    "roave/security-advisories": "dev-latest",
-    "tomaschochola/tooling-php-cs-fixer": "dev-main",
-    "tomaschochola/tooling-phpstan": "dev-main"
-  },
-  "support": {
-    "email": "tomaschochola@tomaschochola.cz",
-    "issues": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu/issues",
-    "source": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu.git"
-  },
-  "type": "library"
+    "description": "APCu-backed PSR-16 cache implementation.",
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/tomaschochola"
+        }
+    ],
+    "homepage": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu",
+    "keywords": [
+        "tomaschochola",
+        "TomasChochola",
+        "Tomas Chochola",
+        "Tomáš Chochola",
+        "apcu",
+        "cache",
+        "psr-16",
+        "simple-cache"
+    ],
+    "license": "CC-BY-ND-4.0",
+    "name": "tomaschochola/php-psr-16-simple-cache-apcu",
+    "prefer-stable": true,
+    "provide": {
+        "psr/simple-cache-implementation": "3.0"
+    },
+    "repositories": [
+        {
+            "no-api": true,
+            "type": "vcs",
+            "url": "https://github.com/tomaschochola/php-psr-16-simple-cache.git"
+        },
+        {
+            "no-api": true,
+            "type": "vcs",
+            "url": "https://github.com/tomaschochola/tooling-php-cs-fixer.git"
+        },
+        {
+            "no-api": true,
+            "type": "vcs",
+            "url": "https://github.com/tomaschochola/tooling-phpstan.git"
+        }
+    ],
+    "require": {
+        "ext-apcu": "*",
+        "php": "^8.5.0",
+        "psr/simple-cache": "^3.0",
+        "tomaschochola/php-psr-16-simple-cache": "dev-main"
+    },
+    "require-dev": {
+        "ext-intl": "*",
+        "ext-pcntl": "*",
+        "ext-xdebug": "*",
+        "ext-zip": "*",
+        "phpunit/phpunit": "^13.0",
+        "roave/security-advisories": "dev-latest",
+        "tomaschochola/tooling-php-cs-fixer": "dev-main",
+        "tomaschochola/tooling-phpstan": "dev-main"
+    },
+    "support": {
+        "email": "tomaschochola@tomaschochola.cz",
+        "issues": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu/issues",
+        "source": "https://github.com/tomaschochola/php-psr-16-simple-cache-apcu.git"
+    },
+    "type": "library"
 }

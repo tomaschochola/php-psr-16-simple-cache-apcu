@@ -137,17 +137,17 @@ readonly class ApcuSimpleCache implements CacheInterface
     }
 
     #[NoDiscard()]
+    private static function deleteKey(string $key): bool
+    {
+        return apcu_delete($key) || !apcu_exists($key);
+    }
+
+    #[NoDiscard()]
     private static function getInterval(DateInterval $interval): int
     {
         $now = new DateTimeImmutable();
 
         return $now->add($interval)->getTimestamp() - $now->getTimestamp();
-    }
-
-    #[NoDiscard()]
-    private static function deleteKey(string $key): bool
-    {
-        return apcu_delete($key) || !apcu_exists($key);
     }
 
     #[NoDiscard()]
