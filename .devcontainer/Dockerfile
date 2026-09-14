@@ -1,17 +1,40 @@
 # syntax=docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
 
-FROM docker.io/library/composer:2@sha256:d8f6343d3fae98107426bc49163ccad46ef85aabd4a27d80a74401fab4aba332 AS versionedcomposer
-FROM docker.io/library/node:24-trixie@sha256:f7d34e58713740f9eef9092c0bd6ff10369d132f7238399a4b270f16d47fa608 AS versionednode
-FROM ghcr.io/php/pie:1.4.9-bin@sha256:9fb4fb481767c48f7c57a7fc2c1ccef6ec8fc1e254751a77213cfb0c8f181eba AS versionedpie
+ARG TARGETARCH
+
+FROM scratch AS composer
+
+ADD --chmod=0755 --checksum=sha256:7a2d379d5b8ffdaa028580ef26494c36d2feef4b178d3dd1473a4dbc5e17c8d6 \
+    https://getcomposer.org/download/2.10.3/composer.phar \
+    /tmp/composer.phar
+ADD --checksum=sha256:2b2df89fb2581e669b4668b451097d4a03f4dc2d7a06df197554064494a90a31 \
+    https://raw.githubusercontent.com/composer/composer.github.io/e7f28b7200249f8e5bc912b42837d4598c74153a/snapshots.pub \
+    /tmp/keys.dev.pub
+ADD --checksum=sha256:d8f3e350437bf3b5342dbf046064ebd1f017ebc720955433194360a01cfd074f \
+    https://raw.githubusercontent.com/composer/composer.github.io/e7f28b7200249f8e5bc912b42837d4598c74153a/releases.pub \
+    /tmp/keys.tags.pub
+
+FROM scratch AS node-amd64
+
+ADD --checksum=sha256:855d581f8a4eb1a8117e3426de25fe02770592febcfb31369aee1ffbfee9e8ec \
+    https://nodejs.org/dist/v24.20.0/node-v24.20.0-linux-x64.tar.gz \
+    /tmp/node.tgz
+
+FROM scratch AS node-arm64
+
+ADD --checksum=sha256:3515603e2487879a39bc75716f1a2affd027500c64ba50e845cf72cb33219013 \
+    https://nodejs.org/dist/v24.20.0/node-v24.20.0-linux-arm64.tar.gz \
+    /tmp/node.tgz
+
+FROM node-${TARGETARCH} AS node
+
+FROM ghcr.io/php/pie:1.4.9-bin@sha256:9fb4fb481767c48f7c57a7fc2c1ccef6ec8fc1e254751a77213cfb0c8f181eba AS pie
 FROM docker.io/library/php:8.5-cli-trixie@sha256:9ebdf4c28ab12c02085e171c31e22ac5f7bbb6a9f6927e3bc3dfe7ee23df51e0
 
-COPY --from=versionedcomposer /usr/bin/composer /usr/local/bin/composer
-COPY --from=versionednode /usr/local/bin/node /usr/local/bin/node
-COPY --from=versionednode /usr/local/include/node /usr/local/include/node
-COPY --from=versionednode /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=versionednode /usr/local/LICENSE /usr/local/share/doc/node/LICENSE
+COPY --from=composer /tmp/composer.phar /usr/local/bin/composer
+COPY --from=node /tmp/node.tgz /tmp/node.tgz
 
-RUN --mount=type=bind,from=versionedpie,source=/pie,target=/usr/local/bin/pie \
+RUN --mount=type=bind,from=pie,source=/pie,target=/usr/local/bin/pie \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade --yes --no-install-recommends \
     && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends git libicu-dev libtool libzip-dev openssh-client python3 sudo unzip zip \
@@ -30,12 +53,12 @@ RUN --mount=type=bind,from=versionedpie,source=/pie,target=/usr/local/bin/pie \
         /home/devcontainer/.local/lib/node_modules \
     && printf '%s\n' 'devcontainer ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/devcontainer \
     && chmod 0440 /etc/sudoers.d/devcontainer \
-    && ln --symbolic ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && ln --symbolic ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && tar --extract --gzip --file /tmp/node.tgz --directory /usr/local --strip-components=1 --exclude='*/README.md' --exclude='*/CHANGELOG.md' --exclude='*/LICENSE' \
+    && rm --force -- /tmp/node.tgz \
     && rm -rf /root/.pie /var/lib/apt/lists/*
 
 COPY php/ "$PHP_INI_DIR/conf.d/"
-COPY --chown=devcontainer:devcontainer --from=versionedcomposer /tmp/keys.dev.pub /tmp/keys.tags.pub /home/devcontainer/.composer/
+COPY --chown=devcontainer:devcontainer --from=composer /tmp/keys.dev.pub /tmp/keys.tags.pub /home/devcontainer/.composer/
 
 ENV NPM_CONFIG_PREFIX=/home/devcontainer/.local
 ENV PATH=/home/devcontainer/.local/bin:${PATH}
