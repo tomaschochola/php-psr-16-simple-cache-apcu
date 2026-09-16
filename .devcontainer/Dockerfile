@@ -37,7 +37,7 @@ COPY --from=node /tmp/node.tgz /tmp/node.tgz
 RUN --mount=type=bind,from=pie,source=/pie,target=/usr/local/bin/pie \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade --yes --no-install-recommends \
-    && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends git libicu-dev libtool libzip-dev openssh-client python3 sudo unzip zip \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends ca-certificates git libicu-dev libtool libzip-dev make openssh-client python3 sudo unzip zip \
     && docker-php-ext-install -j"$(nproc)" intl pcntl zip \
     && pie install --no-cache 'apcu/apcu:5.1.28' \
     && pie install --no-cache 'phpredis/phpredis:6.3.0' \
@@ -53,7 +53,8 @@ RUN --mount=type=bind,from=pie,source=/pie,target=/usr/local/bin/pie \
         /home/devcontainer/.local/lib/node_modules \
     && printf '%s\n' 'devcontainer ALL=(root) NOPASSWD:ALL' > /etc/sudoers.d/devcontainer \
     && chmod 0440 /etc/sudoers.d/devcontainer \
-    && tar --extract --gzip --file /tmp/node.tgz --directory /usr/local --strip-components=1 --exclude='*/README.md' --exclude='*/CHANGELOG.md' --exclude='*/LICENSE' \
+    && tar --extract --gzip --file /tmp/node.tgz --directory /usr/local --strip-components=1 --no-same-owner --exclude='*/README.md' --exclude='*/CHANGELOG.md' --exclude='*/LICENSE' \
+    && ln --symbolic /usr/local/bin/node /usr/local/bin/nodejs \
     && rm --force -- /tmp/node.tgz \
     && rm -rf /root/.pie /var/lib/apt/lists/*
 
