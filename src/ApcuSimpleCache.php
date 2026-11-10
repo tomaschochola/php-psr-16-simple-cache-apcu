@@ -59,7 +59,7 @@ readonly class ApcuSimpleCache implements CacheInterface
         $ok = false;
         $value = apcu_fetch(CacheKeys::validate($key), $ok);
 
-        if ($ok) {
+        if ($ok === true) {
             return $value;
         }
 

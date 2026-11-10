@@ -80,8 +80,10 @@ final class ApcuSimpleCacheTest extends TestCase
         self::assertFalse($cache->has('value'));
         self::assertTrue($cache->set('value', 'stored'));
         self::assertTrue($cache->set('null', null, new DateInterval('PT1M')));
+        self::assertTrue($cache->set('false', false));
         self::assertSame('stored', $cache->get('value'));
         self::assertNull($cache->get('null', 'default'));
+        self::assertFalse($cache->get('false', 'default'));
         self::assertTrue($cache->has('value'));
         self::assertTrue($cache->delete('value'));
         self::assertFalse($cache->has('value'));
